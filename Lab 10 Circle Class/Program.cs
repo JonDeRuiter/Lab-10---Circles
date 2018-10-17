@@ -15,10 +15,15 @@ namespace Lab_10_Circle_Class
 
             do
             {
+                double radius;
                 Console.Write("Welcome to the Circle finder! \nPlease enter a radius: ");
-                //string input = IsDoubleNum(Console.ReadLine());
-                string input = Console.ReadLine();
-                double radius = double.Parse(input);
+                
+                //This was faster to write than methods that verified only digit input while allowing a single decimal point, could have used udouble.TryParse but I only realized that later
+                while (!(double.TryParse(Console.ReadLine(), out radius)) || !(NonNegative(radius)))
+                {
+                    Console.Write("Radius must be a positive number with or without a decimal. \nTry again: ");
+                }
+                
                 Circle x = new Circle(radius);
                 circle.Add(x);
                 Console.WriteLine($"Circumference: {x.CalculateFormattedCircumference()}");
@@ -31,6 +36,7 @@ namespace Lab_10_Circle_Class
             Console.ReadLine();
 
         }
+
         public static bool Continue()
         {
             bool run;
@@ -53,61 +59,17 @@ namespace Lab_10_Circle_Class
             }
             return run;
         }
-        public static string NotEmpty(string input)
+        public static bool NonNegative(double input)
         {
-            input = input.Trim();
-            try
+            if (input > 0)
             {
-                if (input == null || input == "")
-                {
-                    throw new Exception("Input is empty, Please enter a number");
-                }
+                return true;
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e.Message);
-                Console.Write("Please enter a number 1-10: ");
-                input = NotEmpty(Console.ReadLine());
+                return false;
             }
-            return input;
         }
-        public static string IsDoubleNum(string input)
-        {
-
-            string inputX = input.Trim('.');
-            char[] charArray = inputX.ToCharArray();
-            
-            try
-            {
-                if (!IsDigit(inputX))
-                {
-                    throw new Exception("");
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            return input;
-        }
-        public static bool IsDigit(string input)
-        {
-            input = NotEmpty(input);
-            char[] charArray = input.ToCharArray();
-            foreach (char c in charArray)
-            {
-                if (!(char.IsDigit(charArray[c])))
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-
-            }
-            return true;
-        }
+        
     }
 }
